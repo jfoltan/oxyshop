@@ -39,9 +39,24 @@ class UserController extends AbstractController
         }
 
 
-        return $this->render('register.html.twig', [
+        return $this->render('/user/register.html.twig', [
             'controller_name' => 'UserController',
             'form' => $form,
+        ]);
+    }
+
+    #[Route('/users', name: 'users', methods: ['GET'])]
+    public function index(Request $request, HttpClientInterface $client): Response
+    {
+        $response = $client->request('GET', 'http://nginx-container/api/users');
+
+        if ($response->getStatusCode() === 200)
+        {
+            $userData = $response->toArray();
+        }
+
+        return $this->render('user/index.html.twig', [
+            'userData' => $userData,
         ]);
     }
 }
