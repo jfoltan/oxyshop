@@ -26,7 +26,7 @@ class UserController extends AbstractController
 
             $plainPassword = $form->get('plainPassword')->getData();
 
-            $client->request('POST', 'http://nginx-container/api/users', [
+            $response = $client->request('POST', 'http://nginx-container/api/users', [
                 'json' => [
                     'name' => $formData->getName(),
                     'password' => $plainPassword,
@@ -35,9 +35,11 @@ class UserController extends AbstractController
                 ]
             ]);
 
-            return $this->redirectToRoute('user_register');
+            if ($response->getStatusCode() === Response::HTTP_CREATED)
+            {
+                return $this->redirectToRoute('user_register');
+            }
         }
-
 
         return $this->render('/user/register.html.twig', [
             'controller_name' => 'UserController',
