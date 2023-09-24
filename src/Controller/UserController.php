@@ -24,7 +24,7 @@ class UserController extends AbstractController
         {
             $formData = $form->getData();
 
-            $response = $client->request('POST', 'http://nginx-container/api/users', [
+            $client->request('POST', 'http://nginx-container/api/users', [
                 'json' => [
                     'name' => $formData->getName(),
                     'password' => $formData->getPassword(),
