@@ -3,10 +3,38 @@
 {% block title %}Registrace{% endblock %}
 
 {% block body %}
-    <h1>Seznam uzivatelu</h1>
-    <ul>
-        {% for user in userData %}
-            <li>{{ user.name }}, {{ user.email }}, {{ user.role }}</li>
-        {% endfor %}
-    </ul>
+    <style>
+        th {
+            font-weight: normal;
+        }
+    </style>
+
+    <div class="row mt-5">
+        <div class="col-6">
+            <h1 class="mb-5">Seznam uživatelů</h1>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th class="fw-bold" scope="col">ID</th>
+                        <th class="fw-bold" scope="col">Jméno</th>
+                        <th class="fw-bold" scope="col">E-mail</th>
+                        <th class="fw-bold" scope="col">Hash hesla</th>
+                        <th class="fw-bold" scope="col">Role</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in userData %}
+                        <tr>
+                            <th scope="row">{{ user.id }}</th>
+                            <th>{{ user.name }}</th>
+                            <th>{{ user.email }}</th>
+                            <th>{{ user.password }}</th>
+                            <th>{{ user.role }}</th>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <a href="{{ path('user_register') }}" class="btn btn-primary">Zpět na registraci</a>
+        </div>
+    </div>
 {% endblock %}
