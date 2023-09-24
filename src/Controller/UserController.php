@@ -50,7 +50,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/users', name: 'users', methods: ['GET'])]
-    public function index(Request $request, HttpClientInterface $client): Response
+    public function index(HttpClientInterface $client): Response
     {
         $response = $client->request('GET', 'http://nginx-container/api/users');
 

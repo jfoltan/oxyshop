@@ -48,7 +48,7 @@ class UserApiController extends AbstractController
     }
 
     #[Route('/users', name: 'users', methods: ['GET'])]
-    public function Users(Request $request, EntityManagerInterface $entityManager, SerializerInterface $serializer): JsonResponse
+    public function Users(EntityManagerInterface $entityManager, SerializerInterface $serializer): JsonResponse
     {
         $users = $entityManager->getRepository(User::class)->findAll();
 
