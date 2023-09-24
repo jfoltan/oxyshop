@@ -9,17 +9,18 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 #[Route('/api', name: 'api_')]
 class UserApiController extends AbstractController
 {
-    #[Route('/users', name: 'create_user')]
-    public function createUser(Request $request, EntityManagerInterface $entityManager, ValidatorInterface $validator): JsonResponse
+    #[Route('/users', name: 'create_user', methods: ['POST'])]
+    public function createUser(Request $request, EntityManagerInterface $entityManager, ValidatorInterface $validator, SerializerInterface $serializer): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
 
-        $user = new User();
+        $user = $serializer->deserialize(json_encode($data), User::class, 'json');
 
         $errors = $validator->validate($user);
 
@@ -34,14 +35,19 @@ class UserApiController extends AbstractController
             return new JsonResponse(['errors' => $errorMesseages], Response::HTTP_BAD_REQUEST);
         }
 
-        $user->setName($data['name']);
-        $user->setPassword($data['password']);
-        $user->setEmail($data['email']);
-        $user->setRole($data['role']);
-
         $entityManager->persist($user);
         $entityManager->flush();
 
         return new JsonResponse(['message' => 'Uživatel byl vytvořen.'], Response::HTTP_CREATED);
+    }
+
+    #[Route('/users', name: 'users', methods: ['GET'])]
+    public function Users(Request $request, EntityManagerInterface $entityManager, SerializerInterface $serializer): JsonResponse
+    {
+        $users = $entityManager->getRepository(User::class)->findAll();
+
+        $jsonUsers = $serializer->serialize($users, 'json');
+
+        return new JsonResponse($jsonUsers, Response::HTTP_OK, [], true);
     }
 }
