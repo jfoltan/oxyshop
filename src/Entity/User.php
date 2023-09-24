@@ -26,6 +26,7 @@ class User
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: 'E-mail is required.')]
     #[Assert\Email(message: 'E-mail format is invalid.')]
+    #[Assert\Unique(message: 'E-mail is already registered.')]
     private ?string $email = null;
 
     #[ORM\Column(length: 50)]
