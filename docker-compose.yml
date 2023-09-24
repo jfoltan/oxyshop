@@ -37,6 +37,7 @@ services:
     restart: always # always restart unless stopped manually
     environment:
       MARIADB_ROOT_PASSWORD: rootpassword
+      MARIADB_DATABASE: oxyshop
       MARIADB_USER: symfony
       MARIADB_PASSWORD: symfony
     networks:
