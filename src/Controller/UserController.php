@@ -37,8 +37,10 @@ class UserController extends AbstractController
 
             if ($response->getStatusCode() === Response::HTTP_CREATED)
             {
+                $this->addFlash('success', 'Uživatel byl úspěšně registrován.');
                 return $this->redirectToRoute('user_register');
             }
+            $this->addFlash('error', 'Chyba! Nepodařilo se uložit uživatele.');
         }
 
         return $this->render('/user/register.html.twig', [
