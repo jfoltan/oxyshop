@@ -12,7 +12,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class UserController extends AbstractController
 {
-    #[Route('/', name: 'user_register', methods: ['POST'])]
+    #[Route('/', name: 'user_register', methods: ['GET', 'POST'])]
     public function register(Request $request, HttpClientInterface $client): Response
     {
         $user = new User();
