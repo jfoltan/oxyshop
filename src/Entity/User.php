@@ -4,10 +4,12 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
+#[UniqueEntity('email', message: 'This e-mail is already registered.')]
 class User
 {
     #[ORM\Id]
@@ -26,7 +28,6 @@ class User
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: 'E-mail is required.')]
     #[Assert\Email(message: 'E-mail format is invalid.')]
-    #[Assert\Unique(message: 'E-mail is already registered.')]
     private ?string $email = null;
 
     #[ORM\Column(length: 50)]
