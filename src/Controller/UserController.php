@@ -24,10 +24,12 @@ class UserController extends AbstractController
         {
             $formData = $form->getData();
 
+            $plainPassword = $form->get('plainPassword')->getData();
+
             $client->request('POST', 'http://nginx-container/api/users', [
                 'json' => [
                     'name' => $formData->getName(),
-                    'password' => $formData->getPassword(),
+                    'password' => $plainPassword,
                     'email' => $formData->getEmail(),
                     'role' => $formData->getRole(),
                 ]

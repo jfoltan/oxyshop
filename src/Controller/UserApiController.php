@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -16,11 +17,16 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class UserApiController extends AbstractController
 {
     #[Route('/users', name: 'create_user', methods: ['POST'])]
-    public function createUser(Request $request, EntityManagerInterface $entityManager, ValidatorInterface $validator, SerializerInterface $serializer): JsonResponse
+    public function createUser(Request $request, EntityManagerInterface $entityManager, ValidatorInterface $validator, SerializerInterface $serializer, UserPasswordHasherInterface $passwordHasher): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
 
         $user = $serializer->deserialize(json_encode($data), User::class, 'json');
+
+        $plainPassword = $data['password'];
+        $hashedPassword = $passwordHasher->hashPassword($user, $plainPassword);
+
+        $user->setPassword($hashedPassword);
 
         $errors = $validator->validate($user);
 
