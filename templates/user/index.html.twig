@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Registrace{% endblock %}
+
+{% block body %}
+    <h1>Seznam uzivatelu</h1>
+    <ul>
+        {% for user in userData %}
+            <li>{{ user.name }}, {{ user.email }}, {{ user.role }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
